@@ -176,7 +176,7 @@ $.extend(Snake.prototype, {
     // Enable Skynet mode after 2 seconds.
     if(!this.options['human_only']){
       setTimeout(function(){if(!self.automatic){
-        if(self.automatic != false)
+        if(self.automatic == 0)
           self.automatic = true;
       }}, this.skynetModeTimeout)
     }
