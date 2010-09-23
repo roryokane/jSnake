@@ -43,7 +43,7 @@ $.extend(Fruit.prototype, {
     
     if(this.options['mouse_chasing']){
       this.element.css('display', 'none')
-      $().mousemove(function(e){
+      $('body').mousemove(function(e){
         self.position_x = e.pageX
         self.position_y = e.pageY
         self.element.css({'top' : self.position_y, 'left' : self.position_x}); 
@@ -202,8 +202,7 @@ $.extend(Snake.prototype, {
     var h = this.head.clone().text('');
     h.attr('id', this.position_x+'x'+this.position_y);
     h.addClass('block tail '+this.snake_name);
-    h.css('left', this.position_x).css('top', this.position_y);
-    h.css('background-color', this.options['tail_colour'])
+    h.css({'left': this.position_x, 'top':this.position_y, 'background-color': this.options['tail_colour']});
     // This has to be Before instead of After. Don't ask me why, because I can't remember.
     h.insertBefore($(this.head));
     this.tail.unshift(h);
@@ -341,9 +340,7 @@ $.extend(Snake.prototype, {
     }
         
     // Do the actual moving
-    this.head.css('position', 'fixed');
-    this.head.css('left', this.position_x);
-    this.head.css('top', this.position_y);
+    this.head.css({'position': 'fixed', 'left': this.position_x, 'top': this.position_y});
     this.head.attr('id', this.position_x+'x'+this.position_y);
     
     // Remove the last tail, unless they've eaten a fruit.
@@ -503,9 +500,6 @@ $.extend(Snake.prototype, {
       }
       return true;
     }
-    
-    
-    
   },
   
   stop: function(){
