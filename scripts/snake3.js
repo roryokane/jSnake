@@ -111,6 +111,7 @@ $.extend(Snake.prototype, {
   screen_height: false,
   timeout: 100,
   direction: DOWN,
+  next_direction: DOWN,
   snake_name: 'snake',
   self: this,
   automatic: 0,
@@ -292,13 +293,13 @@ $.extend(Snake.prototype, {
   getDirectionFrom: function(input){
     switch(input){
       case this.up_key:
-        if (this.direction != DOWN)   {this.automatic = false; this.direction = UP;    }  break;
+        if (this.curr_direction != DOWN)   {this.automatic = false; this.next_direction = UP;    }  break;
       case this.right_key:                                                                      
-        if (this.direction != LEFT)   {this.automatic = false; this.direction = RIGHT; }  break;
+        if (this.curr_direction != LEFT)   {this.automatic = false; this.next_direction = RIGHT; }  break;
       case this.down_key:                                                                       
-        if (this.direction != UP)     {this.automatic = false; this.direction = DOWN;  }  break;
+        if (this.curr_direction != UP)     {this.automatic = false; this.next_direction = DOWN;  }  break;
       case this.left_key:                                                                       
-        if (this.direction != RIGHT)  {this.automatic = false; this.direction = LEFT;  }  break;
+        if (this.curr_direction != RIGHT)  {this.automatic = false; this.next_direction = LEFT;  }  break;
     }
   },
   
@@ -326,12 +327,13 @@ $.extend(Snake.prototype, {
       this.doSkynet();
     }
     
-    switch(this.direction){
+    switch(this.next_direction){
       case UP:    this.position_y -= this.width; break;
       case RIGHT: this.position_x += this.width; break;
       case DOWN:  this.position_y += this.width; break;
       case LEFT:  this.position_x -= this.width; break;
     }
+    this.curr_direction = this.next_direction;
 
     this.fixOverlaps();
 
@@ -382,55 +384,55 @@ $.extend(Snake.prototype, {
   randomizeDirection: function(){
     seed_direction = Math.random();
     if(seed_direction < 0.25){
-      this.direction = UP;
+      this.next_direction = this.curr_direction = UP;
     }else if(seed_direction < 0.5){
-      this.direction = DOWN;
+      this.next_direction = this.curr_direction = DOWN;
     }else if(seed_direction < 0.75){
-      this.direction = LEFT;
+      this.next_direction = this.curr_direction = LEFT;
     }else{
-      this.direction = RIGHT;
+      this.next_direction = this.curr_direction = RIGHT;
     }
   },
   
   // Automatic-move
   doSkynet: function(){
-    if (this.fruit.position_x < this.position_x && this.clearLeft() ){ this.direction = LEFT}
+    if (this.fruit.position_x < this.position_x && this.clearLeft() ){ this.next_direction = LEFT}
     else if (this.fruit.position_x >  this.position_x && this.clearRight() ){ 
-      this.direction = RIGHT
+      this.next_direction = RIGHT
     }else if (this.fruit.position_y >  this.position_y && this.clearDown() ){ 
-      this.direction = DOWN
+      this.next_direction = DOWN
     }else if (this.fruit.position_x == this.position_x && this.fruit.position_y <= this.position_y && this.clearUp() ){ 
-      this.direction = UP
+      this.next_direction = UP
     }else if (this.fruit.position_x == this.position_x && this.fruit.position_x >=  this.position_y && this.clearDown() ){
-      this.direction = DOWN
+      this.next_direction = DOWN
     }
   
   
     // This code does diagonals. It's pretty creepy, so it's commented out.
     if(Math.random() > 0.5){
-      if(this.fruit.position_y > this.position_y && this.direction == LEFT && this.clearDown()){
-        this.direction = DOWN;
-      }else if(this.fruit.position_y > this.position_y && this.direction == RIGHT && this.clearDown()){
-        this.direction = DOWN;
+      if(this.fruit.position_y > this.position_y && this.curr_direction == LEFT && this.clearDown()){
+        this.next_direction = DOWN;
+      }else if(this.fruit.position_y > this.position_y && this.curr_direction == RIGHT && this.clearDown()){
+        this.next_direction = DOWN;
       }
-      if(this.fruit.position_y < this.position_y && this.direction == LEFT && this.clearDown()){
-        this.direction = UP;
-      }else if(this.fruit.position_y < this.position_y && this.direction == RIGHT && this.clearDown()){
-        this.direction = UP;
+      if(this.fruit.position_y < this.position_y && this.curr_direction == LEFT && this.clearDown()){
+        this.next_direction = UP;
+      }else if(this.fruit.position_y < this.position_y && this.curr_direction == RIGHT && this.clearDown()){
+        this.next_direction = UP;
       }
     }
   
-    if(this.direction == UP && !this.clearUp()){
-      this.direction = LEFT;
+    if(this.next_direction == UP && !this.clearUp()){
+      this.next_direction = LEFT;
     }
-    if (this.direction == LEFT && !this.clearLeft()){
-      this.direction = DOWN;
+    if (this.next_direction == LEFT && !this.clearLeft()){
+      this.next_direction = DOWN;
     }
-    if (this.direction == DOWN && !this.clearDown()){
-      this.direction = RIGHT;
+    if (this.next_direction == DOWN && !this.clearDown()){
+      this.next_direction = RIGHT;
     }
-    if (this.direction == RIGHT && !this.clearRight()){
-      this.direction = UP;
+    if (this.next_direction == RIGHT && !this.clearRight()){
+      this.next_direction = UP;
     }
   },
   
