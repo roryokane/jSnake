@@ -1,1 +1,3 @@
-This is Elliott Kember's JS Snake project!
+This is Elliott Kember’s JavaScript Snake project. It simulates the game Snake, and supports multiple snakes, CPU-controlled snakes, and other options.
+
+In the game Snake, the player, a snake, must eat (run into) food that appears in a random place on the game grid. The snake must not eat itself, but this goal is made harder to achieve by the fact that every time the snake eats a piece of food, it grows one square longer.
